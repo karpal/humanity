@@ -2,8 +2,8 @@
 
 Jalankan perintah berikut untuk memulai proyek Node.js dan menginstal dependency yang dibutuhkan:
 ```bash
-git clone https://github.com/karpal/monadcontract.git
-cd monadcontract
+git clone https://github.com/karpal/humanity.git
+cd humanity
 ```
 ```bash
 npm init -y
