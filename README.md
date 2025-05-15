@@ -1,4 +1,4 @@
-'''bash
+''' bash
 screen -S humanitynew
 '''
 
