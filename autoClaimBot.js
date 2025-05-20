@@ -1,8 +1,9 @@
 const axios = require('axios');
 const fs = require('fs');
-const cron = require('node-cron');
 
 const accounts = JSON.parse(fs.readFileSync('./tokens.json', 'utf-8'));
+const INTERVAL_HOURS = 19;
+const INTERVAL_MS = INTERVAL_HOURS * 60 * 60 * 1000; // 19 jam dalam milidetik
 
 // Fungsi untuk claim reward 1 akun
 async function claimReward(account, index) {
@@ -27,17 +28,15 @@ async function claimReward(account, index) {
 
 // Menjalankan claim untuk semua akun
 async function runAllClaims() {
-  console.log(`🔁 Menjalankan auto-claim untuk ${accounts.length} akun...`);
+  console.log(`🔁 Menjalankan auto-claim untuk ${accounts.length} akun... [${new Date().toLocaleString()}]`);
   for (let i = 0; i < accounts.length; i++) {
     await claimReward(accounts[i], i);
   }
+
+  // Jadwalkan ulang 19 jam setelah ini selesai
+  console.log(`🕒 Menjadwalkan ulang claim dalam ${INTERVAL_HOURS} jam...`);
+  setTimeout(runAllClaims, INTERVAL_MS);
 }
 
-// Cron: Jalankan tiap hari jam 09:00 WIB
-cron.schedule('0 2 * * *', () => {
-  // UTC+7 = jam 2 UTC = jam 9 WIB
-  runAllClaims();
-});
-
-// Jalankan langsung saat script pertama kali dijalankan
+// Jalankan pertama kali saat script dijalankan
 runAllClaims();
